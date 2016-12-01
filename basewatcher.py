@@ -184,7 +184,7 @@ def check_msg(msg, force):
 	global count
 	global msg_time	
 	
-	if count < 10 and not force :                                	#Don't do anything if for the first 10 cycles.  So we can get a good baseline.
+	if count < 600 and not force :                                	#Don't do anything if for the first 10 minutes.  So we can get a good baseline.
 		return True
 	elif msg_time.has_key(msg) == False:						  	#If the key does not exist, then this is the first time we are sending the message.  Create the key with the time and send	
 		msg_time.update({msg:time.time()})	
@@ -241,10 +241,10 @@ def emailalert(msg, data, force=False):
 		print ''
 		
 
-sensor_gas = Sensors('Gas',19,0,2,0)
+sensor_gas = Sensors('Gas',19,0,10,0)
 sensor_water = Sensors('Water', 17,None,1,0)
-sensor_flame = Sensors('Flame', 16,2,5,0)
-sensor_smoke = Sensors('Smoke', 20,1,5,0)
+sensor_flame = Sensors('Flame', 16,2,10,0)
+sensor_smoke = Sensors('Smoke', 20,1,10,0)
 sensor_co = Sensors('CO', 18,3,15,0)
 
 
