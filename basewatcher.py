@@ -87,8 +87,11 @@ class Sensors:
 	def logger(self):
 		conn = sqlite3.connect('sensor_data.db')
 		dbcur = conn.cursor()
-		dbcur.execute('''INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data)
-                  VALUES(?,?,?,?)''', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))	
+		
+		try:
+			dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))
+		except sqlite3.Error as er:
+    		print 'er:', er.message	
 		conn.close()
 		
 	def avg(self):
