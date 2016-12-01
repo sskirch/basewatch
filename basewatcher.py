@@ -125,7 +125,7 @@ class Sensors:
 		before = self.avg()
 		sensor_data = self.get_analog_data()		
 		self.add(sensor_data)
-		if before is None or sensor_data is None : return True			
+		if before is None or sensor_data is None : return False			
 		percent_diff = ((float(sensor_data)/float(before)) * 100) - 100
 		percent_diff = abs(percent_diff)
 		print 'Percent Diff ' + str(percent_diff)
@@ -193,8 +193,7 @@ def check_msg(msg, force):
 	else:
 		msg_time[msg] = time.time()
 		
-	return False	
-	
+	return False		
 
 
 def smsalert(msg, data, force=False):		
