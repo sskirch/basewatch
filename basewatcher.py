@@ -305,19 +305,19 @@ def loop():
 						
 		#Once Every Second: 				
 		if sensor_flame.check_binary_alert() : 
-			print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
+			print "\r" + sensor_flame.sensor_name + 'Binary Alert!!!!' + "\r"
 			smsalert(sensor_flame.sensor_name + ' Alert!!!!', 'True')	
 						
-		if sensor_gas.check_analog_alert() or sensor_gas.check_binary_alert(): 
-			print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
+		if sensor_gas.check_binary_alert(): 
+			print "\r" + sensor_gas.sensor_name + 'Binary Alert!!!!' + "\r"			
 			smsalert(sensor_gas.sensor_name + ' Alert!!!!', 'True')
 		
-		if sensor_co.check_analog_alert() or sensor_co.check_binary_alert(): 
-			print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
+		if sensor_co.check_binary_alert(): 
+			print "\r" + sensor_co.sensor_name + 'Binary  Alert!!!!' + "\r"			
 			smsalert(sensor_co.sensor_name + ' Alert!!!!', 'True')
 		
-		if sensor_smoke.check_analog_alert() or sensor_smoke.check_binary_alert(): 
-			print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
+		if sensor_smoke.check_binary_alert(): 
+			print "\r" + sensor_smoke.sensor_name + 'Binary  Alert!!!!' + "\r"			
 			smsalert(sensor_smoke.sensor_name + ' Alert!!!!', 'True')		
 									
 		if sensor_water.check_binary_alert():
