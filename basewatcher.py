@@ -61,13 +61,24 @@ def temp_reader():
 		return read_temp()['f']	
 	return get_temp
 
+def log_entry(sensor_name,analog_data,binary_data):	
+		conn = sqlite3.connect('sensor_data.db')
+		dbcur = conn.cursor()
+		
+		try:
+			dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(), sensor_name, analog_data, binary_data))
+			conn.commit()
+		except sqlite3.Error as er:
+			print 'er:', er.message	
+		conn.close()
+
 
 #Class to handle sensors on the PCF8591 ADDA.  Or anything that just uses one GPIO
 class Sensors:
 	GPIO_Pin = 0
 	AD_pin = 0	
 	sensor_que = None
-	que_size = 100
+	que_size = 10
 	sensor_name = None
 	sensor_status = None
 	sensor_change_threshold = None
@@ -84,19 +95,9 @@ class Sensors:
 		self.sensor_que = deque()
 		self.alert_count = 0;
 		self.GPIO_alert = GPIO_Alert_in
-		
+					
 	def logger(self):
-		
-		conn = sqlite3.connect('sensor_data.db')
-		dbcur = conn.cursor()
-		
-		try:
-			#dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))
-			dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))
-			conn.commit()
-		except sqlite3.Error as er:
-			print 'er:', er.message	
-		conn.close()
+		log_entry(self.sensor_name, self.get_analog_data(), self.check_binary_alert())
 		
 	def avg(self):
 		total=0		
@@ -112,23 +113,26 @@ class Sensors:
 		if len(self.sensor_que) < self.que_size + 1: return
 		self.sensor_que.popleft()
 		
-		
-		
-	def get_sensor_data(self):
+	def get_analog_data(self):
 		return ADC.read(self.AD_pin)	
 		
-	def	check(self):
+	"""
+	Check to see if there is a sudden change in the analog data.
+	Percent difference threshold is set when object is instantiated
+	i.e, There is a 10% difference between the current reading and the last ten readings. 
+	"""	
+	def	check_analog_alert(self):
 		before = self.avg()
-		sensor_data = self.get_sensor_data()		
+		sensor_data = self.get_analog_data()		
 		self.add(sensor_data)
 		if before is None or sensor_data is None : return True			
 		percent_diff = ((float(sensor_data)/float(before)) * 100) - 100
 		percent_diff = abs(percent_diff)
 		print 'Percent Diff ' + str(percent_diff)
-		if percent_diff >= self.sensor_change_threshold: return False		
-		return True
+		if percent_diff >= self.sensor_change_threshold: return True		
+		return False
 		
-	def check_GPIO_alert(self):
+	def check_binary_alert(self):
 		if(GPIO.input(self.GPIO_Pin) == self.GPIO_alert):
 			return True
 		return False
@@ -176,6 +180,22 @@ def setup():
 	smtp_url = config.get('email', 'url')
 	
 
+def check_msg(msg, force):
+	global count
+	global msg_time	
+	
+	if count < 10 and not force :                                	#Don't do anything if for the first 10 cycles.  So we can get a good baseline.
+		return True
+	elif msg_time.has_key(msg) == False:						  	#If the key does not exist, then this is the first time we are sending the message.  Create the key with the time and send	
+		msg_time.update({msg:time.time()})	
+	elif (time.time() - msg_time[msg]) < 3600 and not force:		#Only allow messages to be sent once an hour.
+		return True
+	else:
+		msg_time[msg] = time.time()
+		
+	return False	
+	
+
 
 def smsalert(msg, data, force=False):		
 	global count
@@ -185,14 +205,7 @@ def smsalert(msg, data, force=False):
 	global Twillio_ACCOUNT_SID
 	global Twillio_AUTH_TOKEN	
 	
-	if count < 100 and not force :                                	#Don't do anything if for the first 100 cycles. 
-		return
-	elif msg_time.has_key(msg) == False:						  	#If the key does not exist, then this is the first time we are sending the message.  Create the key with the time and send	
-		msg_time.update({msg:time.time()})	
-	elif (time.time() - msg_time[msg]) < 3600 and not force:		#Only allow messages to be sent once an hour.
-		return
-	else:
-		msg_time[msg] = time.time()
+	if check_msg(msg,force): return
 	
 	client = TwilioRestClient(Twillio_ACCOUNT_SID, Twillio_AUTH_TOKEN)
 	client.messages.create(
@@ -210,14 +223,7 @@ def emailalert(msg, data, force=False):
 	global email_from
 	global email_to	
 	
-	if count < 100 and not force :                                	#Don't do anything if for the first 100 cycles. 
-		return
-	elif msg_time.has_key(msg) == False:						  	#If the key does not exist, then this is the first time we are sending the message.  Create the key with the time and send	
-		msg_time.update({msg:time.time()})	
-	elif (time.time() - msg_time[msg]) < 3600 and not force:		#Only allow messages to be sent once an hour.
-		return
-	else:
-		msg_time[msg] = time.time()
+	if check_msg(msg,force): return
 			
 	message = """From: From Person <""" +  email_from + """>
 	To: To Person <""" +  email_to + """>
@@ -247,57 +253,84 @@ def loop():
 	while True:
 		global count
 		
-		sensor_gas.logger()
+		print "\n" + 'count: ' + str(count)
 							
 		if (count == 0 or (count % 86400 == 0)) : smsalert('Basewatcher Heartbeat', '', True)  # Send heartbeat on startup and once a day
 		
-		print "\n" + 'count: ' + str(count)
-		
-		
-		if  not sensor_flame.check() or sensor_flame.check_GPIO_alert() : 
-			print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
-			smsalert(sensor_flame.sensor_name + ' Alert!!!!', str(sensor_flame.get_sensor_data()))	
-		print "flame: " + str(sensor_flame.sensor_que)
-		
-		
-		
-		if not sensor_gas.check() or sensor_gas.check_GPIO_alert(): 
-			print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
-			smsalert(sensor_gas.sensor_name + ' Alert!!!!', str(sensor_gas.get_sensor_data()))
-		print "gas: " + str(sensor_gas.sensor_que)
-		
+		#once every 10 minutes
+		if (count % (60 * 10) == 0) : 
+			if sensor_flame.check_analog_alert(): 
+				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
+				smsalert(sensor_flame.sensor_name + ' Alert!!!!', str(sensor_flame.get_analog_data()))	
+			print "flame: " + str(sensor_flame.sensor_que)
+							
+			if sensor_gas.check_analog_alert(): 
+				print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_gas.sensor_name + ' Alert!!!!', str(sensor_gas.get_analog_data()))
+			print "gas: " + str(sensor_gas.sensor_que)
+			
+			if sensor_co.check_analog_alert(): 
+				print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_co.sensor_name + ' Alert!!!!', str(sensor_co.get_analog_data()))
+			print "CO: " + str(sensor_co.sensor_que)	
+			
+			if sensor_smoke.check_analog_alert(): 
+				print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_smoke.sensor_name + ' Alert!!!!', str(sensor_smoke.get_analog_data()))
+			print "Smoke: " + str(sensor_smoke.sensor_que)
+			
+			#the Temp sensor is unique and use the 1 wire protocol on GPIO 4
+			temp_high = 100
+			temp_low = 45
+			tempature = read_temp()['f']
+			if tempature > temp_high or tempature < temp_low:		
+				print "Temp!: " + str(tempature)
+				smsalert("Temp!: " , str(tempature))
 						
-		if sensor_water.check_GPIO_alert():
+			log_entry("Temp",tempature,None)
+			
+		#once every hour	
+		if (count % (60 * 60) == 0) : 	
+			sensor_gas.logger()
+			sensor_flame.logger()
+			sensor_co.logger()			
+			sensor_smoke.logger()
+			
+		#once every Minute	
+		if (count % 60 == 0) : 				
+			if sensor_flame.check_binary_alert() : 
+				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
+				smsalert(sensor_flame.sensor_name + ' Alert!!!!', 'True')	
+							
+			if sensor_gas.check_analog_alert() or sensor_gas.check_binary_alert(): 
+				print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_gas.sensor_name + ' Alert!!!!', 'True')
+			
+			if sensor_co.check_analog_alert() or sensor_co.check_binary_alert(): 
+				print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_co.sensor_name + ' Alert!!!!', 'True')
+			
+			if sensor_smoke.check_analog_alert() or sensor_smoke.check_binary_alert(): 
+				print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
+				smsalert(sensor_smoke.sensor_name + ' Alert!!!!', 'True')
+			
+		#Once Every Second:								
+		if sensor_water.check_binary_alert():
 			print "Maybe Water"
 			
 			water_count += 1      
 			#Check ten times to make sure the signal is constant and correct 
-			if not sensor_water.check_GPIO_alert():
+			if not sensor_water.check_binary_alert():
 				water_count = 0
 				
 			if water_count > 9:		
 				smsalert("Water!",'')
-				print sensor_water.sensor_name + ': ' + str(sensor_water.check_GPIO_alert())
+				print sensor_water.sensor_name + ': ' + str(sensor_water.check_binary_alert())
 				water_count = 0
 		
-		if not sensor_co.check() or sensor_co.check_GPIO_alert(): 
-			print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
-			smsalert(sensor_co.sensor_name + ' Alert!!!!', str(sensor_co.get_sensor_data()))
-		print "CO: " + str(sensor_co.sensor_que)	
 		
-		if not sensor_smoke.check() or sensor_smoke.check_GPIO_alert(): 
-			print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
-			smsalert(sensor_smoke.sensor_name + ' Alert!!!!', str(sensor_smoke.get_sensor_data()))
-		print "Smoke: " + str(sensor_smoke.sensor_que)
 		count += 1
 				
-		#the Temp sensor is unique and use the 1 wire protocol on GPIO 4
-		temp_high = 100
-		temp_low = 45
-		if read_temp()['f'] > temp_high or read_temp()['f'] < temp_low:		
-			print "Temp!: " + str(read_temp()['f'])
-			smsalert("Temp!: " , str(read_temp()['f']))
-
 		time.sleep(1)
 
 if __name__ == '__main__':
