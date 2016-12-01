@@ -85,6 +85,8 @@ class Sensors:
 		self.GPIO_alert = GPIO_Alert_in
 		
 	def logger(self):
+		quit()
+		
 		conn = sqlite3.connect('sensor_data.db')
 		dbcur = conn.cursor()
 		
