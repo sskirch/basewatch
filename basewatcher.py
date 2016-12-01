@@ -170,7 +170,6 @@ def setup():
 	email_to = config.get('email', 'email_to')
 	smtp_url = config.get('email', 'url')
 	
-	print Twillio_ACCOUNT_SID
 
 
 def smsalert(msg, data, force=False):		
