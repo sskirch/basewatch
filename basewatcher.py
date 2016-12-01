@@ -32,8 +32,6 @@ email_to = None
 smtp_url = None
 
 
-
-
 def read_temp_raw():	
 	base_dir = '/sys/bus/w1/devices/'
 	device_folder = glob.glob(base_dir + '28*')[0]
@@ -62,6 +60,8 @@ def temp_reader():
 		return read_temp()['f']	
 	return get_temp
 
+
+#Class to handle sensors on the PCF8591 ADDA.  Or anything that just uses one GPIO
 class Sensors:
 	GPIO_Pin = 0
 	AD_pin = 0	
@@ -128,9 +128,7 @@ class Sensors:
 	
 	def check_alt(self):
 		return self.alt_function
-					
-				
-
+									
 
 def setup():		
 	global SMS_from
