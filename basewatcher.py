@@ -7,6 +7,7 @@ import math
 import os
 import glob
 import time
+import sys
 import sqlite3
 from twilio.rest import TwilioRestClient
 from collections import deque
@@ -85,7 +86,7 @@ class Sensors:
 		self.GPIO_alert = GPIO_Alert_in
 		
 	def logger(self):
-		quit()
+		sys.exit()
 		
 		conn = sqlite3.connect('sensor_data.db')
 		dbcur = conn.cursor()
