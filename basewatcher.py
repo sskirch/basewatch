@@ -258,7 +258,7 @@ def loop():
 		if (count == 0 or (count % 86400 == 0)) : smsalert('Basewatcher Heartbeat', '', True)  # Send heartbeat on startup and once a day
 		
 		#once every 10 minutes
-		if (count % (60 * 10) == 0) : 
+		if (count % (60 * 10) == 0 and count > 0) : 
 			if sensor_flame.check_analog_alert(): 
 				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
 				smsalert(sensor_flame.sensor_name + ' Alert!!!!', str(sensor_flame.get_analog_data()))	
@@ -290,31 +290,33 @@ def loop():
 			log_entry("Temp",tempature,None)
 			
 		#once every hour	
-		if (count % (60 * 60) == 0) : 	
+		if (count % (60 * 60) == 0 and count > 0) : 	
 			sensor_gas.logger()
 			sensor_flame.logger()
 			sensor_co.logger()			
 			sensor_smoke.logger()
 			
 		#once every Minute	
-		if (count % 60 == 0) : 				
-			if sensor_flame.check_binary_alert() : 
-				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
-				smsalert(sensor_flame.sensor_name + ' Alert!!!!', 'True')	
-							
-			if sensor_gas.check_analog_alert() or sensor_gas.check_binary_alert(): 
-				print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
-				smsalert(sensor_gas.sensor_name + ' Alert!!!!', 'True')
-			
-			if sensor_co.check_analog_alert() or sensor_co.check_binary_alert(): 
-				print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
-				smsalert(sensor_co.sensor_name + ' Alert!!!!', 'True')
-			
-			if sensor_smoke.check_analog_alert() or sensor_smoke.check_binary_alert(): 
-				print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
-				smsalert(sensor_smoke.sensor_name + ' Alert!!!!', 'True')
-			
-		#Once Every Second:								
+		#if (count % 60 == 0 and count > 0) :
+						
+						
+		#Once Every Second: 				
+		if sensor_flame.check_binary_alert() : 
+			print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
+			smsalert(sensor_flame.sensor_name + ' Alert!!!!', 'True')	
+						
+		if sensor_gas.check_analog_alert() or sensor_gas.check_binary_alert(): 
+			print "\r" + sensor_gas.sensor_name + ' Alert!!!!' + "\r"			
+			smsalert(sensor_gas.sensor_name + ' Alert!!!!', 'True')
+		
+		if sensor_co.check_analog_alert() or sensor_co.check_binary_alert(): 
+			print "\r" + sensor_co.sensor_name + ' Alert!!!!' + "\r"			
+			smsalert(sensor_co.sensor_name + ' Alert!!!!', 'True')
+		
+		if sensor_smoke.check_analog_alert() or sensor_smoke.check_binary_alert(): 
+			print "\r" + sensor_smoke.sensor_name + ' Alert!!!!' + "\r"			
+			smsalert(sensor_smoke.sensor_name + ' Alert!!!!', 'True')		
+									
 		if sensor_water.check_binary_alert():
 			print "Maybe Water"
 			
