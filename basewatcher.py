@@ -285,9 +285,6 @@ def loop():
 			tempature = read_temp()['f']
 			if tempature > temp_high or tempature < temp_low:		
 				print "Temp!: " + str(tempature)
-				smsalert("Temp!: " , str(tempature))
-						
-			log_entry("Temp",tempature,None)
 			
 		#once every hour	
 		if count % (60 * 60) == 0 and count > 0 :
@@ -296,6 +293,7 @@ def loop():
 			sensor_flame.logger()
 			sensor_co.logger()			
 			sensor_smoke.logger()
+			log_entry("Temp",tempature,None)
 			
 		#once every Minute	
 		#if (count % 60 == 0 and count > 0) :
