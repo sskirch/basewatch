@@ -258,7 +258,7 @@ def loop():
 		if (count == 0 or (count % 86400 == 0)) : smsalert('Basewatcher Heartbeat', '', True)  # Send heartbeat on startup and once a day
 		
 		#once every 10 minutes
-		if (count % (60 * 10) == 0 and count > 0) : 
+		if count % (60 * 10) == 0 and count > 0 : 
 			print "Ten Minutes"
 			if sensor_flame.check_analog_alert(): 
 				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
@@ -291,7 +291,7 @@ def loop():
 			log_entry("Temp",tempature,None)
 			
 		#once every hour	
-		if (count % (60 * 60) == 0 and count > 0) :
+		if count % (60 * 60) == 0 and count > 0 :
 			print "One Hour" 	
 			sensor_gas.logger()
 			sensor_flame.logger()
