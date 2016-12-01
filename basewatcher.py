@@ -89,7 +89,9 @@ class Sensors:
 		dbcur = conn.cursor()
 		
 		try:
+			#dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))
 			dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(),self.sensor_name, self.get_sensor_data(), self.check_GPIO_alert()))
+			conn.commit()
 		except sqlite3.Error as er:
 			print 'er:', er.message	
 		conn.close()
