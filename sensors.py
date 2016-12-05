@@ -26,7 +26,7 @@ class sensor:
     alert_count = None
     GPIO_alert = 0
     
-    instances = ['1','2','3']
+    instances = []
     
     
     def __init__(self, sensor_name_in, GPIO_Pin_in, AD_pin_in, threshold_in, GPIO_Alert_in):
@@ -37,10 +37,8 @@ class sensor:
         if GPIO_Pin_in != None: GPIO.setup(GPIO_Pin_in, GPIO.IN)
         self.sensor_que = deque()
         self.alert_count = 0;
-        self.GPIO_alert = GPIO_Alert_in
-        
-        #self.__class__.instances.append(weakref.proxy(self))
-        #self.name = sensor_name_in
+        self.GPIO_alert = GPIO_Alert_in        
+        sensor.instances.append(self)
     
                     
     def logger(self,sensor_name,analog_data,binary_data):
