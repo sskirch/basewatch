@@ -3,7 +3,6 @@
 import time
 import math
 import sys
-import sqlite3
 from twilio.rest import TwilioRestClient
 from ConfigParser import SafeConfigParser
 import smtplib

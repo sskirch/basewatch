@@ -37,14 +37,12 @@ class sensor:
                     
     def logger(self,sensor_name,analog_data,binary_data):
         conn = sqlite3.connect('sensor_data.db')
-        dbcur = conn.cursor()
-        
+        dbcur = conn.cursor()        
         try:
             dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(), self.sensor_name, self.get_analog_data(), self.check_binary_alert()))
             conn.commit()
         except sqlite3.Error as er:
-            print 'er:', er.message    
-            
+            print 'er:', er.message                
         conn.close()
         
     def __avg(self):
@@ -72,6 +70,9 @@ class sensor:
     @abstractmethod    
     def check_binary_alert(self): pass
     
+    @abstractmethod
+    def get_analog_data(self): pass
+   
     
     
 class sensor_PCF8591(sensor):                      
@@ -167,13 +168,24 @@ class sensor_temp(sensor):
         return False       
                
     
+"""    
+# Setup Sensors    
+"""
+
+#For Annalog PCF8591     
 ADC.setup(0x48)
+#For Binary PCF8591
 GPIO.setmode(GPIO.BCM)
+
+#for 1 Wire DS18B20 digital thermometer
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
-conn = sqlite3.connect('sensor_data.db')
 
+"""
+    Set up SQLite DB for logging
+"""
+conn = sqlite3.connect('sensor_data.db')
 dbcur = conn.cursor()
 check_table = "SELECT name FROM sqlite_master WHERE type='table' AND name='sensor_logs'"
 create_table = "CREATE TABLE sensor_logs (data_time REAL, sensor_name VARCHAR(255), analog_data REAL, gpio_data BOOLEAN)"
