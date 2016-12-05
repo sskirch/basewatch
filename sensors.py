@@ -37,8 +37,10 @@ class sensor:
         if GPIO_Pin_in != None: GPIO.setup(GPIO_Pin_in, GPIO.IN)
         self.sensor_que = deque()
         self.alert_count = 0;
-        self.GPIO_alert = GPIO_Alert_in        
-        sensor.instances.append(self)
+        self.GPIO_alert = GPIO_Alert_in
+        
+        self.__class__.instances.append(weakref.proxy(self))
+        self.name = sensor_name_in
     
                     
     def logger(self,sensor_name,analog_data,binary_data):

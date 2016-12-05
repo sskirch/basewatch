@@ -18,7 +18,7 @@ conn.close()
 
 
 urls = (    
-    '/sensor/', 'sensor'
+    '/sensor/', 'getsensor'
 )
 
 app = web.application(urls, globals())
@@ -31,7 +31,7 @@ sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
 
-class sensor:        
+class getsensor:        
     def GET(self):        
         getInput = web.input(time="current",sensor="gas",type="binary")
         
@@ -41,14 +41,15 @@ class sensor:
         
         #exec("return_data = sensor_obj.get_" +  getInput.type + "_data()")        
         
-                
+        
+        
         print getInput.time
         print getInput.sensor
         print getInput.type
         
         return_data = ''
         for instance in sensors.sensor.instances:
-            return_data += str(instance.sensor_name)
+            return_data += instance.name
                 
         return return_data
         
