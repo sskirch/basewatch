@@ -1,6 +1,7 @@
 import web
 import sensors
 import sqlite3
+import copy
 
 
 conn = sqlite3.connect('sensor_data.db')
@@ -17,16 +18,9 @@ conn.close()
 
 
 urls = (    
-    '/sensor/', 'sensor',
-    '/sensorcurrentbinary/(.*)', 'sensor_current_binary'
+    '/sensor/', 'sensor'
 )
 
-"""
-urls = (
-    '/users', 'list_users',
-    '/users/(.*)', 'get_user'
-)
-"""
 app = web.application(urls, globals())
 
 sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
@@ -40,6 +34,13 @@ sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 class sensor:        
     def GET(self):        
         getInput = web.input(time="current",sensor="gas",type="binary")
+        
+        print "sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")"
+        
+        exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
+                
+        print sensor_obj.get_analog_data()
+        
         print getInput.time
         print getInput.sensor
         print getInput.type
