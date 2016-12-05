@@ -39,15 +39,14 @@ class sensor:
         
         exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
         
+        exec("return_data = sensor_obj.get_" +  getInput.sensor + "_data()")        
         
         print getInput.time
         print getInput.sensor
         print getInput.type
-        
                 
-        print sensor_obj.get_analog_data()
+        return return_data
         
-        return sensor_obj.get_analog_data()
         
            
 
