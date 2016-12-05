@@ -91,3 +91,5 @@ ENV/
 # Eclipse
 .project
 .pydevproject
+
+.sensor_data.db
