@@ -35,11 +35,11 @@ class sensor:
     def GET(self):        
         getInput = web.input(time="current",sensor="gas",type="binary")
         
-        print "sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")"
+        #print "sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")"
         
-        exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
+        #exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
         
-        exec("return_data = sensor_obj.get_" +  getInput.type + "_data()")        
+        #exec("return_data = sensor_obj.get_" +  getInput.type + "_data()")        
         
         print getInput.time
         print getInput.sensor
