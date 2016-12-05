@@ -17,7 +17,7 @@ conn.close()
 
 
 urls = (    
-    '/sensorcurrentanalog/(.*)', 'sensor_current_analog',
+    '/sensor/', 'sensor_current_analog',
     '/sensorcurrentbinary/(.*)', 'sensor_current_binary'
 )
 
@@ -37,13 +37,10 @@ sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
 
-class sensor_current_analog:        
-    def GET(self, sensor_name):
-        if not sensor_name:
-            print "No Name" 
-            exit()
-        elif sensor_name == 'gas':
-            print "gas analog"    
+class sensor:        
+    def GET(self, sensor_name):        
+        getInput = web.input(time="current",sensor="gas",type="binary")
+        print getInput.time   
 
 class sensor_current_binary:
     def GET(self, sensor_name):        
