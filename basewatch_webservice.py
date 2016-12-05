@@ -49,7 +49,7 @@ class getsensor:
         
         return_data = ''
         for instance in sensors.sensor.instances:
-            return_data += instance.name
+            return_data += instance.sensor_name + '.'
                 
         return return_data
         
