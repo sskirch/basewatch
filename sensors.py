@@ -204,5 +204,5 @@ if not dbcur.execute(check_table).fetchone():
 
 conn.close()
 
-print len(sensors.sensor.instances)
+print len(sensor.instances)
 
