@@ -40,7 +40,10 @@ sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 class sensor:        
     def GET(self):        
         getInput = web.input(time="current",sensor="gas",type="binary")
-        print getInput.time   
+        print getInput.time
+        print getInput.sensor
+        print getInput.type
+           
 
 class sensor_current_binary:
     def GET(self, sensor_name):        
