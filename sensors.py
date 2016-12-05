@@ -65,6 +65,9 @@ class sensor:
         if len(self.sensor_que) < self.que_size + 1: return
         self.sensor_que.popleft()        
         
+    def getpast(self):
+        sql =     
+        
     """
     Check to see if there is a sudden change in the analog data.
     Percent difference threshold is set when object is instantiated
@@ -201,6 +204,10 @@ if not dbcur.execute(check_table).fetchone():
     if not dbcur.execute(check_table).fetchone():
         print "Unable to create sensor_log table"
         exit()
+
+dbcur.execute('CREATE INDEX time_index on sensor_logs(data_time,sensor_name)')
+conn.commit()
+
 
 conn.close()
 
