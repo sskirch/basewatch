@@ -203,3 +203,6 @@ if not dbcur.execute(check_table).fetchone():
         exit()
 
 conn.close()
+
+print len(sensors.sensor.instances)
+
