@@ -88,6 +88,9 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Eclipse
 .project
 .pydevproject
 
+#Basewatch DB
+.sensor_data.db
