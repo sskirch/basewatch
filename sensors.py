@@ -161,6 +161,7 @@ class sensor_temp(sensor):
         
     def check_binary_alert(self): #the Temp sensor is unique and use the 1 wire protocol on GPIO 4
         tempature = self.get_temp
+        print tempature
         if tempature > self.temp_high or tempature < self.temp_low:
             return True
         return False       
