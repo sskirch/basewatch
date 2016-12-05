@@ -23,6 +23,8 @@ urls = (
 
 app = web.application(urls, globals())
 
+print len(sensors.sensor.instances)
+
 sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
 sensor_water = sensors.sensor_water('Water', 17,None,None,0)
 sensor_flame = sensors.sensor_PCF8591('Flame', 16,2,10,0)
@@ -30,6 +32,7 @@ sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
 sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
+print len(sensors.sensor.instances)
 
 class getsensor:        
     def GET(self):        
