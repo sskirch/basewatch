@@ -157,7 +157,7 @@ class sensor_temp(sensor):
         return self.__read_temp()['f']    
         
     def get_analog_data(self):
-        return self.get_temp    
+        return self.get_temp()    
         
     def check_binary_alert(self): #the Temp sensor is unique and use the 1 wire protocol on GPIO 4
         tempature = self.get_temp
