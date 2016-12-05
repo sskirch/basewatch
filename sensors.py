@@ -66,7 +66,7 @@ class sensor:
         self.sensor_que.popleft()        
         
     def getpast(self):
-        sql =     
+        sql = ""
         
     """
     Check to see if there is a sudden change in the analog data.
