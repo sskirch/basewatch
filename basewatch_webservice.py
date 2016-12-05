@@ -20,6 +20,13 @@ urls = (
     '/sensorcurrentanalog/(.*)', 'sensor_current_analog',
     '/sensorcurrentbinary/(.*)', 'sensor_current_binary'
 )
+
+"""
+urls = (
+    '/users', 'list_users',
+    '/users/(.*)', 'get_user'
+)
+"""
 app = web.application(urls, globals())
 
 sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
@@ -30,20 +37,21 @@ sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
 
-class hello:        
-    def sensor_current_analog(self, sensor_name):
+class sensor_current_analog:        
+    def GET(self, sensor_name):
         if not sensor_name:
             print "No Name" 
             exit()
         elif sensor_name == 'gas':
             print "gas analog"    
 
-    def sensor_current_binary(self, sensor_name):
+class sensor_current_binary:
+    def GET(self, sensor_name):        
         if not sensor_name:
             print "No Name" 
             exit()
         elif sensor_name == 'gas':
-            print "gas analog"            
-
+            print "gas binary"    
+            
 if __name__ == "__main__":
     app.run()
