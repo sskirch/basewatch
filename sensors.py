@@ -11,6 +11,7 @@ import glob
 import time
 from collections import deque
 from abc import ABCMeta, abstractmethod
+import weakref
 
 
 #Class to handle sensor on the PCF8591 ADDA.  Or anything that just uses one GPIO
@@ -25,6 +26,9 @@ class sensor:
     alert_count = None
     GPIO_alert = 0
     
+    instances = []
+    
+    
     def __init__(self, sensor_name_in, GPIO_Pin_in, AD_pin_in, threshold_in, GPIO_Alert_in):
         self.sensor_name = sensor_name_in
         self.GPIO_Pin = GPIO_Pin_in
@@ -34,6 +38,10 @@ class sensor:
         self.sensor_que = deque()
         self.alert_count = 0;
         self.GPIO_alert = GPIO_Alert_in
+        
+        self.__class__.instances.append(weakref.proxy(self))
+        self.name = sensor_name_in
+    
                     
     def logger(self,sensor_name,analog_data,binary_data):
         conn = sqlite3.connect('sensor_data.db')

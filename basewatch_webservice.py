@@ -44,6 +44,10 @@ class sensor:
         print getInput.time
         print getInput.sensor
         print getInput.type
+        
+        return_data = ''
+        for instance in sensor.instances:
+            return_data += instance.name
                 
         return return_data
         
