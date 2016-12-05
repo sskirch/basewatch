@@ -24,23 +24,11 @@ urls = (
 app = web.application(urls, globals())
 
 sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 sensor_water = sensors.sensor_water('Water', 17,None,None,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 sensor_flame = sensors.sensor_PCF8591('Flame', 16,2,10,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
-for instance in sensors.sensor.instances:
-    print instance.sensor_name + '.'
 
 
 class getsensor:        
@@ -63,7 +51,7 @@ class getsensor:
         for instance in sensors.sensor.instances:
             return_data += instance.sensor_name + '.'
                 
-        return return_data
+        return '<br>' + return_data
         
         
            
