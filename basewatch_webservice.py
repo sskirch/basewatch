@@ -41,12 +41,13 @@ class sensor:
         
         #exec("return_data = sensor_obj.get_" +  getInput.type + "_data()")        
         
+                
         print getInput.time
         print getInput.sensor
         print getInput.type
         
         return_data = ''
-        for instance in sensor.instances:
+        for instance in sensors.sensor.instances:
             return_data += instance.name
                 
         return return_data
