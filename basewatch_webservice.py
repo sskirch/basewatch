@@ -31,43 +31,48 @@ print len(sensors.sensor.instances)
 
 class getsensor:        
     def GET(self):        
-        getInput = web.input(time="current",sensor="gas",type="binary")
+        getInput = web.input(timing="current",sensorname="gas",datatype="binary")
         
-        if getInput.sensor == 'gas':
-            sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
-        elif getInput.sensor == 'gas':
-            sensor_water = sensors.sensor_water('Water', 17,None,None,0)
-        elif getInput.sensor == 'gas':
-            sensor_flame = sensors.sensor_PCF8591('Flame', 16,2,10,0)
-        elif getInput.sensor == 'gas':
-            sensor_smoke = sensors.sensor_PCF8591(
-        elif getInput.sensor == 'gas':'Smoke', 20,1,10,0)
-            sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
-        elif getInput.sensor == 'gas':
-            sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
-        elif getInput.sensor == 'gas':
+        timing = getInput.timing
+        sensor_name = getInput.sensorname
+        data_type = getInput.datatype
         
+        """
+        Instantiate the right class based on sensor name.
+        Possible sensors" gas, water, flame, smoke, co, and temp
+        """
+        if sensor_name == 'gas':
+            sensor = sensors.sensor_PCF8591('Gas',19,0,10,0)
+        elif sensor_name == 'water':
+            sensor = sensors.sensor_water('Water', 17,None,None,0)
+        elif sensor_name == 'flame':
+            sensor = sensors.sensor_PCF8591('Flame', 16,2,10,0)
+        elif sensor_name == 'smoke':
+            sensor = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
+        elif sensor_name == 'co':
+            sensor = sensors.sensor_PCF8591('CO', 18,3,15,0)
+        elif sensor_name == 'temp':
+            sensor = sensors.sensor_temp('Temp', None,None,20,0)
+        else:
+            print "Error: Invalid sensor name."
+            return "Error: Invalid sensor name."    
         
-        
-        #print "sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")"
-        
-        #exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
-        
-        #exec("return_data = sensor_obj.get_" +  getInput.type + "_data()")        
-        
-        
-        
-        print getInput.time
-        print getInput.sensor
-        print getInput.type
-        
-        print len(sensors.sensor.instances)
-        
-        return_data = ''
-        for instance in sensors.sensor.instances:
-            return_data += instance.sensor_name + '.'
+        """
+        Get by type.
+        Possible types: binary, analog.
+        Binary is an alert that is either on of off.  (true or false)
+        Analog is a number returned from the sensor.  All the numbers are arbitrary,
+        except for the temp sensor, which is returning fahrenheit.          
+                   
+        if data_type == 'binary':
+            
+        elif data_type = 'analog':
+            
+        else
+            print "Error: Invalid data type."
+            return "Error: Invalid data type.
                 
-        return '<br>' + return_data
+            """
         
         
            
