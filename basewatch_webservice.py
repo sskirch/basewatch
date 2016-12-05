@@ -17,7 +17,7 @@ conn.close()
 
 
 urls = (    
-    '/sensor/', 'sensor_current_analog',
+    '/sensor/', 'sensor',
     '/sensorcurrentbinary/(.*)', 'sensor_current_binary'
 )
 
