@@ -38,12 +38,17 @@ class sensor:
         print "sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")"
         
         exec("sensor_obj = copy.deepcopy(sensor_" +  getInput.sensor + ")")
-                
-        print sensor_obj.get_analog_data()
+        
         
         print getInput.time
         print getInput.sensor
         print getInput.type
+        
+                
+        print sensor_obj.get_analog_data()
+        
+        return sensor_obj.get_analog_data()
+        
            
 
 class sensor_current_binary:
