@@ -16,10 +16,7 @@ if not dbcur.execute(check_table).fetchone():
 conn.close()
 
 
-
-
-urls = (
-    urls = (    
+urls = (    
     '/sensorcurrentanalog/(.*)', 'sensor_current_analog',
     '/sensorcurrentbinary/(.*)', 'sensor_current_binary'
 )
@@ -41,7 +38,7 @@ class hello:
         elif sensor_name == 'gas':
             print "gas analog"    
 
-     def sensor_current_binary(self, sensor_name):
+    def sensor_current_binary(self, sensor_name):
         if not sensor_name:
             print "No Name" 
             exit()
