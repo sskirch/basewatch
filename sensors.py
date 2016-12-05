@@ -26,7 +26,7 @@ class sensor:
     alert_count = None
     GPIO_alert = 0
     
-    instances = 1
+    instances = ['1','2','3']
     
     
     def __init__(self, sensor_name_in, GPIO_Pin_in, AD_pin_in, threshold_in, GPIO_Alert_in):
