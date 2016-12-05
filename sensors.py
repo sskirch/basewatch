@@ -74,7 +74,7 @@ class sensor:
     
     
     
-class sensor_PCF8591:                      
+class sensor_PCF8591(sensor):                      
     def get_analog_data(self):
         return ADC.read(self.AD_pin)    
    
