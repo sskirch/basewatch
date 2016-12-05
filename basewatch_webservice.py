@@ -47,6 +47,8 @@ class getsensor:
         print getInput.sensor
         print getInput.type
         
+        print len(sensors.sensor.instances)
+        
         return_data = ''
         for instance in sensors.sensor.instances:
             return_data += instance.sensor_name + '.'
