@@ -30,7 +30,7 @@ class sensor:
         self.GPIO_Pin = GPIO_Pin_in
         self.AD_pin = AD_pin_in        
         self.sensor_change_threshold = threshold_in
-        GPIO.setup(GPIO_Pin_in, GPIO.IN)
+        if GPIO_Pin_in != None: GPIO.setup(GPIO_Pin_in, GPIO.IN)
         self.sensor_que = deque()
         self.alert_count = 0;
         self.GPIO_alert = GPIO_Alert_in
