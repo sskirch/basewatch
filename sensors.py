@@ -65,8 +65,27 @@ class sensor:
         if len(self.sensor_que) < self.que_size + 1: return
         self.sensor_que.popleft()        
         
-    def getpast(self):
-        sql = ""
+    def getpast(self, seconds, data_type):
+        column_name = '' 
+        if data_type == 'binary':
+            column_name = 'gpio_data'
+        elif data_type == 'analog':  
+            column_name = 'analog_data'
+        else:
+            return "Error: invalid data type"                                        
+                  
+        sql = "SELECT %s FROM sensor_logs WHERE data_time > %s AND sensor_name = %s" % (column_name, seconds, self.sensor_name)
+        conn = sqlite3.connect('sensor_data.db')
+        dbcur = conn.cursor()
+        conn.execute(sql)
+        all_rows = conn.fetchall()
+        conn.close
+        return all_rows
+        
+        
+        
+        
+        
         
     """
     Check to see if there is a sudden change in the analog data.
@@ -204,10 +223,7 @@ if not dbcur.execute(check_table).fetchone():
     if not dbcur.execute(check_table).fetchone():
         print "Unable to create sensor_log table"
         exit()
-
-dbcur.execute('CREATE INDEX time_index on sensor_logs(data_time,sensor_name)')
-conn.commit()
-
-
+    dbcur.execute('CREATE INDEX time_index on sensor_logs(data_time,sensor_name)')
+    conn.commit()    
 conn.close()
 

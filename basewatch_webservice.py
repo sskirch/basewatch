@@ -2,6 +2,7 @@ import web
 import sensors
 import sqlite3
 import copy
+from tornado.test import concurrent_test
 
 
 conn = sqlite3.connect('sensor_data.db')
@@ -63,16 +64,52 @@ class getsensor:
         Binary is an alert that is either on of off.  (true or false)
         Analog is a number returned from the sensor.  All the numbers are arbitrary,
         except for the temp sensor, which is returning fahrenheit.          
-                   
+        
+        """           
+        dt = ''           
         if data_type == 'binary':
-            
-        elif data_type = 'analog':
-            
-        else
+            dt = 'binary'
+        elif data_type == 'analog':
+            dt = 'analog'
+        else:
             print "Error: Invalid data type."
-            return "Error: Invalid data type.
-                
-            """
+            return "Error: Invalid data type."
+        
+        time_in_seconds = 
+        if timing.isdigit():
+            time_in_seconds = int(timing)
+        else:    
+            timings = {'current': 0 ,
+                       'day': 86400,
+                       '2days': (86400 * 2),                   
+                       '3days': (86400 * 3),                   
+                       '4days': (86400 * 4),                   
+                       '5days': (86400 * 5),                   
+                       '6days': (86400 * 6),                   
+                       'week': (86400 * 7),   
+                       '1week': (86400 * 7 * 1),
+                       '2weeks': (86400 * 7 * 2),
+                       '3weeks': (86400 * 7 * 3),
+                       '4weeks': (86400 * 7 * 4),
+                       '2months': (86400 * 30 * 2),
+                       '3months': (86400 * 30 * 3),
+                       '4months': (86400 * 30 * 4),
+                       '5months': (86400 * 30 * 5),
+                       '6months': (86400 * 30 * 6),
+                       }
+        
+        time_in_seconds = timings[timing]
+        
+        if time_in_seconds == None:
+            print "Error: Invalid timing."
+            return "Error: Invalid Timing."
+        
+        
+        
+        
+        
+        
+          
         
         
            
