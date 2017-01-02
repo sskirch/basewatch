@@ -49,7 +49,7 @@ def check_msg(msg, force):
 	global count
 	global msg_time	
 	
-	if count < 600 and not force :                                	#Don't do anything if for the first 10 minutes.  So we can get a good baseline.
+	if count < 300 and not force :                                	#Don't do anything if for the first 5 minutes.  So we can get a good baseline.
 		return True
 	elif msg_time.has_key(msg) == False:						  	#If the key does not exist, then this is the first time we are sending the message.  Create the key with the time and send	
 		msg_time.update({msg:time.time()})	
