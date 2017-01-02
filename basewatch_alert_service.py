@@ -155,13 +155,14 @@ def loop():
 			
 		#once every hour	
 		#if count % (60 * 60) == 0 and count > 0 :
-		#	print "One Hour" 	
-		#	sensor_gas.logger()
-		#	sensor_flame.logger()
-		#	sensor_co.logger()			
-		#	sensor_smoke.logger()
-		#	sensor_water.logger()
-		#	sensor_temp.logger()
+		if count % (60) == 0 and count > 0 :
+			print "One Hour" 	
+			sensor_gas.logger()
+			sensor_flame.logger()
+			sensor_co.logger()			
+			sensor_smoke.logger()
+			sensor_water.logger()
+			sensor_temp.logger()
 			
 		#once every Minute	
 		#if (count % 60 == 0 and count > 0) :
