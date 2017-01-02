@@ -60,7 +60,7 @@ class sensor:
                                     
         return total/self.que_size
                 
-    def __add(self,input_data):
+    def add(self,input_data):
         self.sensor_que.append(input_data)
         if len(self.sensor_que) < self.que_size + 1: return
         self.sensor_que.popleft()        
