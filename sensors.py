@@ -41,17 +41,17 @@ class sensor:
         self.__class__.instances.append(self)
     
                     
-    def logger(self,sensor_name,analog_data,binary_data):
-        conn = sqlite3.connect('sensor_data.db')
-        dbcur = conn.cursor()        
-        try:
-            dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(), self.sensor_name, self.get_analog_data(), self.check_binary_alert()))
-            conn.commit()
-        except sqlite3.Error as er:
-            print 'er:', er.message                
-        conn.close()
+    #def logger(self,sensor_name,analog_data,binary_data):
+        #conn = sqlite3.connect('sensor_data.db')
+        #dbcur = conn.cursor()        
+        #try:
+        #    dbcur.execute('INSERT INTO sensor_logs(data_time, sensor_name, analog_data, gpio_data) VALUES(?,?,?,?)', (time.time(), self.sensor_name, self.get_analog_data(), self.check_binary_alert()))
+        #    conn.commit()
+        #except sqlite3.Error as er:
+        #    print 'er:', er.message                
+        #conn.close()
         
-    def __avg(self):
+    def avg(self):
         total=0        
         if len(self.sensor_que) < self.que_size:
             return None        
@@ -64,7 +64,7 @@ class sensor:
         self.sensor_que.append(input_data)
         if len(self.sensor_que) < self.que_size + 1: return
         self.sensor_que.popleft()        
-        
+    """    
     def getpast(self, seconds, data_type):
         column_name = '' 
         if data_type == 'binary':
@@ -81,7 +81,7 @@ class sensor:
         all_rows = conn.fetchall()
         conn.close
         return all_rows
-        
+    """    
         
         
         
@@ -213,6 +213,7 @@ os.system('modprobe w1-therm')
 """
     Set up SQLite DB for logging
 """
+"""
 conn = sqlite3.connect('sensor_data.db')
 dbcur = conn.cursor()
 check_table = "SELECT name FROM sqlite_master WHERE type='table' AND name='sensor_logs'"
@@ -226,4 +227,5 @@ if not dbcur.execute(check_table).fetchone():
     dbcur.execute('CREATE INDEX time_index on sensor_logs(data_time,sensor_name)')
     conn.commit()    
 conn.close()
+"""
 
