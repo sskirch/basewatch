@@ -41,7 +41,7 @@ class sensor:
         self.__class__.instances.append(self)
     
                     
-    def logger(self,sensor_name,analog_data,binary_data):
+    def logger(self):
         conn = sqlite3.connect('sensor_data.db')
         dbcur = conn.cursor()        
         try:
