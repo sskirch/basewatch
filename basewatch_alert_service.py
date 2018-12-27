@@ -3,7 +3,7 @@
 import time
 import math
 import sys
-from twilio.rest import TwilioRestClient
+from twilio.rest import Client
 from ConfigParser import SafeConfigParser
 import smtplib
 from smtplib import SMTPException
@@ -73,7 +73,7 @@ def smsalert(msg, data, force=False):
 	
 	if check_msg(msg,force): return
 	
-	client = TwilioRestClient(Twillio_ACCOUNT_SID, Twillio_AUTH_TOKEN)
+	client = Client(Twillio_ACCOUNT_SID, Twillio_AUTH_TOKEN)
 	client.messages.create(
         	to=SMS_to,
 	        from_=SMS_from,
