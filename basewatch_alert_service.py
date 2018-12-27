@@ -129,7 +129,7 @@ def loop():
     	if datetime.now() > drain_fill_time:
     		print "\n" + 'Solenoid on'
     	 	drain_filler_trigger.on()
-    	 	sleep(60)
+    	 	time.sleep(60)
     	 	drain_filler_trigger.off()
     	 	print "\n" + 'Solenoid off'
     		drain_fill_time = datetime.now() + timedelta(hours=1)
@@ -214,11 +214,8 @@ def loop():
 		time.sleep(1)
 
 if __name__ == '__main__':
-	try:
-		setup()
-		loop()
-	except KeyboardInterrupt: 
-		pass	
+	setup()
+	loop()
 
 
 
