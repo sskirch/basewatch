@@ -7,8 +7,10 @@ from twilio.rest import TwilioRestClient
 from ConfigParser import SafeConfigParser
 import smtplib
 from smtplib import SMTPException
+from datetime import datetime, timedelta
 
 import sensors
+import triggers
 
 conn = None
 count = 0
@@ -113,11 +115,21 @@ sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
 sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
+drain_filler_trigger = trigger('Drain Filler',27)
 
 def loop():
 	water_count = 0
+	
+	drain_fill_time = datetime.now() + timedelta(minutes=1)
 	while True:
 		global count
+
+    	if datetime.now() > drain_fill_time:
+    	 	drain_filler_trigger.on()
+    	 	sleep(60)
+    	 	drain_filler_trigger.off()
+    		drain_fill_time = datetime.now() + timedelta(hours=1)
+		
 		
 		print "\n" + 'count: ' + str(count)
 							
@@ -156,12 +168,12 @@ def loop():
 		#once every hour	
 		if count % (60 * 60) == 0 and count > 0 :
 			print "One Hour" 	
-			sensor_gas.logger()
-			sensor_flame.logger()
-			sensor_co.logger()			
-			sensor_smoke.logger()
-			sensor_water.logger()
-			sensor_temp.logger()
+			#sensor_gas.logger()
+			#sensor_flame.logger()
+			#sensor_co.logger()			
+			#sensor_smoke.logger()
+			#sensor_water.logger()
+			#sensor_temp.logger()
 			
 		#once every Minute	
 		#if (count % 60 == 0 and count > 0) :
