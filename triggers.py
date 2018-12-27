@@ -17,6 +17,7 @@ class trigger:
         self.GPIO_Pin = GPIO_Pin_in
         self.trigger_name = trigger_name_in
         self.trigger_status = False
+        GPIO.setup(self.GPIO_Pin, GPIO.OUT)
         
     def on(self):
         self.trigger_status = True
