@@ -128,6 +128,7 @@ def loop():
     	if datetime.now() > drain_fill_time:
     		print "\n" + 'Solenoid on'
     	 	drain_filler_trigger.on()
+    	 	exit()
     	 	sleep(60)
     	 	drain_filler_trigger.off()
     	 	print "\n" + 'Solenoid off'
