@@ -94,3 +94,5 @@ ENV/
 
 #Basewatch DB
 .sensor_data.db
+.config.ini
+
