@@ -125,16 +125,15 @@ def loop():
 		global count
 		print "\n" + 'Cycle Started '
 
-		'''
+		
     	if datetime.now() > drain_fill_time:
     		print "\n" + 'Solenoid on'
     	 	drain_filler_trigger.on()
-    	 	exit()
     	 	sleep(60)
     	 	drain_filler_trigger.off()
     	 	print "\n" + 'Solenoid off'
     		drain_fill_time = datetime.now() + timedelta(hours=1)
-		'''
+		
 		
 		print "\n" + 'count: ' + str(count)
 							
