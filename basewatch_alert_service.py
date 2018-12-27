@@ -115,7 +115,7 @@ sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
 sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
 sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 
-drain_filler_trigger = trigger('Drain Filler',27)
+drain_filler_trigger = triggers.trigger('Drain Filler',27)
 
 def loop():
 	water_count = 0
