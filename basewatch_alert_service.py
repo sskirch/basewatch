@@ -118,20 +118,21 @@ sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
 drain_filler_trigger = triggers.trigger('Drain Filler',27)
 
 def loop():
-	water_count = 0
+	water_count = 0	
+	print "\n" + 'Cycle Started '
 	
 	drain_fill_time = datetime.now() + timedelta(minutes=1)
 	while True:
 		global count
-		print "\n" + 'Cycle Started '
-		
+
+		#will turn a solinoid on one a week for 60 secconds
 		if datetime.now() > drain_fill_time:
 			print "\n" + 'Solenoid on'
 			drain_filler_trigger.on()
 			time.sleep(60)
 			drain_filler_trigger.off()
 			print "\n" + 'Solenoid off'
-			drain_fill_time = datetime.now() + timedelta(hours=1)
+			drain_fill_time = datetime.now() + timedelta(weeks=1)
 
 		print "\n" + 'count: ' + str(count)
 							
