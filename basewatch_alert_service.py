@@ -124,17 +124,15 @@ def loop():
 	while True:
 		global count
 		print "\n" + 'Cycle Started '
+		
+		if datetime.now() > drain_fill_time:
+			print "\n" + 'Solenoid on'
+			drain_filler_trigger.on()
+			time.sleep(60)
+			drain_filler_trigger.off()
+			print "\n" + 'Solenoid off'
+			drain_fill_time = datetime.now() + timedelta(hours=1)
 
-		
-    	if datetime.now() > drain_fill_time:
-    		print "\n" + 'Solenoid on'
-    	 	drain_filler_trigger.on()
-    	 	time.sleep(60)
-    	 	drain_filler_trigger.off()
-    	 	print "\n" + 'Solenoid off'
-    		drain_fill_time = datetime.now() + timedelta(hours=1)
-		
-		
 		print "\n" + 'count: ' + str(count)
 							
 		if (count == 0 or (count % 86400 == 0)) : smsalert('Basewatcher Heartbeat', '', True)  # Send heartbeat on startup and once a day
