@@ -79,9 +79,7 @@ def smsalert(msg, data, force=False):
 	        from_=SMS_from,
         	body=msg + ' ' + data,
 		)
-	print ''
 	print 'SMS sent ' + msg
-	print ''
 
 #todo:  This has never been tested
 def emailalert(msg, data, force=False):		
@@ -105,15 +103,14 @@ def emailalert(msg, data, force=False):
 		print "Successfully sent email: " + msg
 	except SMTPException:
 		print "Error: unable to send email"
-		print ''
 		
 
-sensor_gas = sensors.sensor_PCF8591('Gas',19,0,10,0)
+sensor_gas = sensors.sensor_PCF8591('Gas',19,0,30,0)
 sensor_water = sensors.sensor_water('Water', 17,None,None,0)
-sensor_flame = sensors.sensor_PCF8591('Flame', 16,2,10,0)
-sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,10,0)
-sensor_co = sensors.sensor_PCF8591('CO', 18,3,15,0)
-sensor_temp = sensors.sensor_temp('Temp', None,None,20,0)
+sensor_flame = sensors.sensor_PCF8591('Flame', 16,2,30,0)
+sensor_smoke = sensors.sensor_PCF8591('Smoke', 20,1,30,0)
+sensor_co = sensors.sensor_PCF8591('CO', 18,3,30,0)
+sensor_temp = sensors.sensor_temp('Temp', None,None,10,0)
 
 drain_filler_trigger = triggers.trigger('Drain Filler',27)
 
@@ -134,13 +131,13 @@ def loop():
 			print "\n" + 'Solenoid off'
 			drain_fill_time = datetime.now() + timedelta(weeks=1)
 
-		print "\n" + 'count: ' + str(count)
+		#print "\n" + 'count: ' + str(count)
 							
 		if (count == 0 or (count % 86400 == 0)) : smsalert('Basewatcher Heartbeat', '', True)  # Send heartbeat on startup and once a day
 		
 		#once every 10 minutes
 		if count % (60 * 10) == 0 and count > 0 : 
-			print "Ten Minutes"
+			#print "Ten Minutes"
 			if sensor_flame.check_analog_alert(): 
 				print "\r" + sensor_flame.sensor_name + ' Alert!!!!' + "\r"
 				smsalert(sensor_flame.sensor_name + ' Alert!!!!', str(sensor_flame.get_analog_data()))	

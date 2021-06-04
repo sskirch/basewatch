@@ -81,7 +81,10 @@ class sensor_PCF8591(sensor):
    
     def check_analog_alert(self):
         before = self.avg()
-        sensor_data = self.get_analog_data()        
+	try:
+	        sensor_data = self.get_analog_data()        
+	except:
+		sendor_data = None
         self.add(sensor_data)
         if before is None or sensor_data is None : return False            
         percent_diff = ((float(sensor_data)/float(before)) * 100) - 100
